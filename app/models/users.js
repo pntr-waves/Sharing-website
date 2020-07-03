@@ -5,20 +5,27 @@ var userSchema = mongoose.Schema({
     local: {
         name:String,
         email: String,
-        password: String
+        password: String,
+        local:String,
     },
+    
     facebook: {
         id: String,
         token: String,
         email: String,
-        name: String
+        name: String,
+        facebook:String,
     },
     google: {
         id: String,
         token: String,
         email: String,
-        name: String
-    }
+        name: String,
+        google:String,
+    },
+    fullname:String,
+    address:String,
+    phone:String,
 });
 //phuong thuc hash
 userSchema.methods.generateHash = function(password){

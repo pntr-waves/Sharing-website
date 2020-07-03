@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+    <title>Thông tin người dùng</title>
+    <script src="jquery.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnmy").click(function () {
+                alert("hello")
+            })
+
+        });
+
+    </script>
+
+    <style>
+        .carousel-item {
+            height: 65vh;
+            min-height: 350px;
+            background: no-repeat center center scroll;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+        .w3-tangerine {
+            font-family: "Tangerine", serif;
+        }
+
+
+
+        #rightPanel {
+            margin-top: 140px;
+            min-height: 415px;
+            margin-left: 10%;
+        }
+
+        /* Credit to bootsnipp.com for the css for the color graph */
+        .colorgraph {
+            height: 5px;
+            border-top: 0;
+            background: #c4e17f;
+            border-radius: 5px;
+            background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+            background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+            background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+            background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+        }
+
+        .container {
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand w3-tangerine w3-xxlarge" href="/home">The Sharing</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="col-12 col-md-10 col-lg-8">
+                <form class="card card-sm" action="/home/search" method="GET">
+                    <div class="card-body row no-gutters align-items-center">
+
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" type="search"
+                                placeholder="Search topics or keywords" name="q">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-success" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/home">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/share/<%= user._id %>">Share</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Lọc theo Danh mục
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/home/cat=sach">Sách</a>
+                            <a class="dropdown-item" href="/home/cat=thoitrang">Thời trang</a>
+                            <a class="dropdown-item" href="/home/cat=dientu">Điện tử</a>
+                            <a class="dropdown-item" href="/home/cat=giaydep">Giày dép</a>
+                            <a class="dropdown-item" href="/home/cat=linhtinh">Linh tinh</a>
+
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Lọc
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/home/filter_time">Lọc theo sản phẩm mới nhất</a>
+                            <a class="dropdown-item" href="/home/filter_view">Lọc theo sản phẩm mới nhất được chú ý
+                                nhất</a>
+                            <a class="dropdown-item" href="/home/filter_comment">Lọc theo tương tác</a>
+
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <%= user.local.name||user.facebook.name||user.google.name %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/profile/<%= user._id %>">Profile</a>
+                            <a class="dropdown-item" href="/shopping-cart/<%= user._id %>">Giỏ hàng</a>
+                            <a class="dropdown-item" href="/count/<%= user._id %>">Của tôi</a>
+                            <a class="dropdown-item" href="/notification/<%= user._id %>">Thông báo</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Đăng xuất</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+    </nav>
+
+
+
+
+    <div class="container">
+        <br>
+        <br>
+        <div class="row" id="main">
+
+            <div class="col-md-8 well" id="rightPanel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <%- include ("./partials/message") %>
+                        <%- include ("./partials/messages") %>
+                        <form role="form" action="/profile/<%=user._id%>" method="POST">
+                            <h2>Edit your profile.<small>It's always easy</small></h2>
+                            <% if(user.local.local) { %>
+                            <a href="/profile/change_pass/<%=user._id%>">Đổi mật khẩu</a>
+                            <% } %>
+                            <hr class="colorgraph">
+                            <% if(user.local.local) { %>
+                            <div class="form-group">
+                                <label>USERNAME: </label>
+                                <input type="text" name="name" id="email" class="form-control input-lg"
+                                    value="<%=user.local.name||user.facebook.name||user.google.name%>" tabindex="4"
+                                    disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>EMAIL: </label>
+                                <input type="email" name="email" id="email" class="form-control input-lg"
+                                    value="<%=user.local.email%>" tabindex="4" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>TÊN ĐẦY ĐỦ: </label>
+                                <input type="text" name="fullname" id="email" class="form-control input-lg"
+                                    value="<%=user.fullname%>" tabindex="4">
+                            </div>
+
+                            <div class="form-group">
+                                <label>ĐỊA CHỈ: </label>
+                                <input type="text" name="address" id="email" class="form-control input-lg"
+                                    value="<%=user.address%>" tabindex="4">
+                            </div>
+                            <div class="form-group">
+                                <label>SỐ ĐIỆN THOẠI: </label>
+                                <input type="text" name="phone" id="email" class="form-control input-lg"
+                                    value="<%=user.phone%>" tabindex="4">
+                            </div>
+
+
+                            <hr class="colorgraph">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6"></div>
+                                <div class="col-xs-12 col-md-6"><button class="btn-success btn-block btn-lg"
+                                        type="submit">Save</button></div>
+
+                            </div>
+                            <% } %>
+                            <% if(user.facebook.facebook) { %>
+                            <div class="form-group">
+                                <label>EMAIL: </label>
+                                <input type="email" name="email" id="email" class="form-control input-lg"
+                                    value="<%=user.facebook.email%>" tabindex="4" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>TÊN ĐẦY ĐỦ: </label>
+                                <input type="text" name="fullname" id="email" class="form-control input-lg"
+                                    value="<%=user.fullname%>" tabindex="4">
+                            </div>
+
+                            <div class="form-group">
+                                <label>ĐỊA CHỈ: </label>
+                                <input type="text" name="address" id="email" class="form-control input-lg"
+                                    value="<%=user.address%>" tabindex="4">
+                            </div>
+                            <div class="form-group">
+                                <label>SỐ ĐIỆN THOẠI: </label>
+                                <input type="text" name="phone" id="email" class="form-control input-lg"
+                                    value="<%=user.phone%>" tabindex="4">
+                            </div>
+                            <hr class="colorgraph">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6"></div>
+                                <div class="col-xs-12 col-md-6"><button class="btn-success btn-block btn-lg"
+                                        type="submit">Save</button></div>
+
+                            </div>
+                            <% } %>
+                            <% if(user.google.google) { %>
+                            <div class="form-group">
+                                <label>EMAIL: </label>
+                                <input type="email" name="email" id="email" class="form-control input-lg"
+                                    value="<%=user.google.email%>" tabindex="4" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>TÊN ĐẦY ĐỦ: </label>
+                                <input type="text" name="fullname" id="email" class="form-control input-lg"
+                                    value="<%=user.fullname%>" tabindex="4">
+                            </div>
+
+                            <div class="form-group">
+                                <label>ĐỊA CHỈ: </label>
+                                <input type="text" name="address" id="email" class="form-control input-lg"
+                                    value="<%=user.address%>" tabindex="4">
+                            </div>
+                            <div class="form-group">
+                                <label>SỐ ĐIỆN THOẠI: </label>
+                                <input type="text" name="phone" id="email" class="form-control input-lg"
+                                    value="<%=user.phone%>" tabindex="4">
+                            </div>
+                            <hr class="colorgraph">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6"></div>
+                                <div class="col-xs-12 col-md-6"><button class="btn-success btn-block btn-lg"
+                                        type="submit">Save</button></div>
+
+                            </div>
+                            <% } %>
+
+
+
+                        </form>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="t_and_c_m" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title" id="myModalLabel">Terms & Conditions</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi,
+                                    aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi
+                                    tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi,
+                                    aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi
+                                    tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi,
+                                    aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi
+                                    tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi,
+                                    aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi
+                                    tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi,
+                                    aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi
+                                    tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi,
+                                    aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi
+                                    tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi,
+                                    aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi
+                                    tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">I Agree</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

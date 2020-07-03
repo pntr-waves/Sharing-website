@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
-    <title>Document</title>
+    <title>Chi tiết sản phẩm</title>
     <script src="jquery.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -310,6 +310,23 @@
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="col-12 col-md-10 col-lg-8">
+                <form class="card card-sm" action="/home/search" method="GET">
+                    <div class="card-body row no-gutters align-items-center">
+
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" type="search"
+                                placeholder="Search topics or keywords" name="q">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-success" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
 
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
@@ -329,7 +346,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Danh mục
+                            Lọc theo Danh mục
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/home/cat=sach">Sách</a>
@@ -340,6 +357,19 @@
 
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Lọc
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/home/filter_time">Lọc theo sản phẩm mới nhất</a>
+                            <a class="dropdown-item" href="/home/filter_view">Lọc theo sản phẩm mới nhất được chú ý
+                                nhất</a>
+                            <a class="dropdown-item" href="/home/filter_comment">Lọc theo tương tác</a>
+
+                        </div>
+                    </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -347,8 +377,10 @@
                             <%= user.local.name||user.facebook.name||user.google.name %>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/shopping-cart/<%= user._id %>">Yêu thích</a>
+                            <a class="dropdown-item" href="/profile/<%= user._id %>">Profile</a>
+                            <a class="dropdown-item" href="/shopping-cart/<%= user._id %>">Giỏ hàng</a>
                             <a class="dropdown-item" href="/count/<%= user._id %>">Của tôi</a>
+                            <a class="dropdown-item" href="/notification/<%= user._id %>">Thông báo</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout">Đăng xuất</a>
                         </div>
@@ -417,7 +449,7 @@
         </div>
         <form action="/detail/<%= aaa._id %>/<%= user._id %>" method="post">
             <div class="form-group">
-                <label>Comment:</label>
+                <label>Comment:(<%=aaa.comment%>)</label>
                 <input type="text" class="form-control" name="comment">
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
@@ -425,8 +457,10 @@
         <div style="margin-top: 15px">
             <% bbb.forEach(function(item) { %>
             <!-- Project One -->
-            <div class="row">
-                <h4><%= item.userName %>: <%= item.text %></h4>
+            <div >
+                <div style="font-size: 10px;font-weight:bold">(<%=item.time%>)</div>
+                
+                <div><%= item.userName %>: <%= item.text %></div>
             </div>
             <!-- /.row -->
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>ĐÃ KẾT NỐI</h1>
+    <% if(temp=="0"){ %>
+        <% findchat.forEach(function(item) { %>
+            <div><a href="/chat/<%=user._id%><%=item.user%>"><%=item.userName%></a></div>
+        <% }) %>
+    <% }else{ %>
+        <% findchat.forEach(function(item) { %>
+            <div><a href="/chat/<%=item.partner%><%=user._id%>"><%=item.partnerName%></a></div>
+        <% }) %>
+    <% } %>
+    
+</body>
+
+</html>

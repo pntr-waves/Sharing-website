@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
-    <title>Sản phẩm của tôi</title>
+    <title>Thanh toán</title>
     <script src="jquery.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -28,28 +28,15 @@
         .w3-tangerine {
             font-family: "Tangerine", serif;
         }
-    </style>
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
 
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
+        .bdy {
+            margin-top: 100px;
+        }
+    </style>
 </head>
 
 <body>
-
-    <!-- Navigation -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
             <a class="navbar-brand w3-tangerine w3-xxlarge" href="/home">The Sharing</a>
@@ -139,32 +126,150 @@
 
         </div>
     </nav>
-    <div style="margin-top: 150px">
-        <% bbb.forEach(function(item) { %>
-        <!-- Project One -->
-        <div class="row">
-            <div class="col-md-7">
-                <a href="/detail/<%= item._id %>">
-                    <img class="img-fluid rounded mb-3 mb-md-0" src="<%= item.urlImage %>" alt=""
-                        style="width: 320px;height:240px">
-                </a>
+    <!-- Navbar -->
+    <div class="bdy">
+        <!--Main layout-->
+        <main class="mt-5 pt-4">
+            <div class="container wow fadeIn">
+
+                <!-- Heading -->
+                <h2 class="my-5 h2 text-center">CHECKOUT FORM</h2>
+
+                <!--Grid row-->
+                <div class="row">
+
+                    <!--Grid column-->
+                    <div class="col-md-8 mb-4">
+
+                        <!--Card-->
+                        <div class="card">
+
+                            <!--Card content-->
+                            <form class="card-body" action="/shopping-cart/checkout/<%= user._id %>" method="POST">
+
+                                <!--Grid row-->
+                                <div class="row">
+
+                                    <!--Grid column-->
+                                    <div class="col-md mb-2">
+
+                                        <!--firstName-->
+                                        <div class="md-form ">
+
+                                            <label for="firstName" class="">Tên đầy đủ</label>
+                                            <input type="text" id="firstName" class="form-control" name="fullname"
+                                                value="<%=user.fullname%>" required>
+
+
+                                        </div>
+
+                                    </div>
+                                    <!--Grid column-->
+
+
+
+                                </div>
+                                <!--Grid row-->
+
+                                <!--Username-->
+                                <label for="email" class="">Số điện thoại</label>
+                                <br>
+                                <div class="md-form input-group pl-0 mb-5">
+
+                                    <div class="input-group-prepend">
+
+                                        <span class="input-group-text" id="basic-addon1">@</span>
+                                    </div>
+                                    <input type="text" class="form-control py-0" name="phone" value="<%= user.phone %>"
+                                        aria-describedby="basic-addon1" required>
+                                </div>
+
+                                <!--email-->
+                                <div class="md-form mb-5">
+                                    <label for="email" class="">Email</label>
+                                    <input type="text" id="email" class="form-control"
+                                        value="<%= user.local.email||user.facebook.email||user.google.email %>"
+                                        required>
+
+                                </div>
+
+                                <!--address-->
+                                <div class="md-form mb-5">
+                                    <label for="address" class="">Địa chỉ</label>
+                                    <input type="text" id="address" class="form-control" value="<%=user.address%>"
+                                        name="address" required>
+
+                                </div>
+                                <div class="md-form mb-5">
+                                    <label for="address" class="">Lời nhắn thêm(nếu có)</label>
+                                    <input type="text" id="message" class="form-control" name="message">
+
+                                </div>
+
+
+
+                                <!--Grid row-->
+
+                                <hr class="mb-4">
+
+
+                                <button class="btn btn-primary btn-lg btn-block" type="submit">Payment</button>
+                            </form>
+
+                        </div>
+                        <!--/.Card-->
+
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-md-4 mb-4">
+
+                        <!-- Heading -->
+                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted">Your cart</span>
+
+                        </h4>
+                        <ul class="list-group mb-3 z-depth-1"></ul>
+                        <% product.forEach(function(item) { %>
+
+                        <!-- Cart -->
+
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0"><%= item.productName %></h6>
+                                <small class="text-muted">Brief description</small>
+                            </div>
+                            <span class="text-muted"><%= item.price %></span>
+                        </li>
+
+
+                        <!-- Cart -->
+
+                        <% }); %>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (USD)</span>
+                            <strong>$20</strong>
+                        </li>
+                        </ul>
+
+
+
+
+                    </div>
+                    <!--Grid column-->
+
+                </div>
+                <!--Grid row-->
+
             </div>
-            <div class="col-md-5">
-
-                <h3><%= item.name %></h3>
-                <p>Price: <%= item.price %></p>
-                <a class="btn btn-primary" href="/detail/<%= item._id %>">View Project</a>
-                <a class="btn btn-primary" href="delete/<%= item._id %>/<%= item.userId %>">Delete</a>
-            </div>
-        </div>
-        <!-- /.row -->
-
-        <hr>
-
-
-        <% }); %>
+        </main>
+        <!--Main layout-->
     </div>
 
+
+    </footer>
+    <!--/.Footer-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

@@ -2,23 +2,34 @@
 <html>
 
 <head>
-    <title>Node Authentication</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <!-- load fontawesome -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
-    <title>Document</title>
+    <title>Chia sẻ</title>
     <script src="jquery.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnmy").click(function () {
+                alert("hello")
+            })
+
+        });
+
+    </script>
+
     <style>
         .carousel-item {
             height: 65vh;
@@ -33,23 +44,14 @@
         .w3-tangerine {
             font-family: "Tangerine", serif;
         }
-    </style>
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
 
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
+        .bdy {
+            padding-top: 50px;
+            
+
+        }
+    </style>
+
 </head>
 
 <body>
@@ -62,16 +64,33 @@
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="col-12 col-md-10 col-lg-8">
+                <form class="card card-sm" action="/home/search" method="GET">
+                    <div class="card-body row no-gutters align-items-center">
+
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" type="search"
+                                placeholder="Search topics or keywords" name="q">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-success" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
 
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <a class="nav-link" href="/home">Home
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
 
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/share/<%= user._id %>">Share</a>
                     </li>
 
@@ -81,14 +100,27 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Danh mục
+                            Lọc theo Danh mục
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/home/cat=sach">Sách</a>
-                                <a class="dropdown-item" href="/home/cat=thoitrang">Thời trang</a>
-                                <a class="dropdown-item" href="/home/cat=dientu">Điện tử</a>
-                                <a class="dropdown-item" href="/home/cat=giaydep">Giày dép</a>
-                                <a class="dropdown-item" href="/home/cat=linhtinh">Linh tinh</a>
+                            <a class="dropdown-item" href="/home/cat=sach">Sách</a>
+                            <a class="dropdown-item" href="/home/cat=thoitrang">Thời trang</a>
+                            <a class="dropdown-item" href="/home/cat=dientu">Điện tử</a>
+                            <a class="dropdown-item" href="/home/cat=giaydep">Giày dép</a>
+                            <a class="dropdown-item" href="/home/cat=linhtinh">Linh tinh</a>
+
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Lọc
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/home/filter_time">Lọc theo sản phẩm mới nhất</a>
+                            <a class="dropdown-item" href="/home/filter_view">Lọc theo sản phẩm mới nhất được chú ý
+                                nhất</a>
+                            <a class="dropdown-item" href="/home/filter_comment">Lọc theo tương tác</a>
 
                         </div>
                     </li>
@@ -99,8 +131,10 @@
                             <%= user.local.name||user.facebook.name||user.google.name %>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/shopping-cart/<%= user._id %>">Yêu thích</a>
+                            <a class="dropdown-item" href="/profile/<%= user._id %>">Profile</a>
+                            <a class="dropdown-item" href="/shopping-cart/<%= user._id %>">Giỏ hàng</a>
                             <a class="dropdown-item" href="/count/<%= user._id %>">Của tôi</a>
+                            <a class="dropdown-item" href="/notification/<%= user._id %>">Thông báo</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout">Đăng xuất</a>
                         </div>
@@ -112,48 +146,128 @@
         </div>
     </nav>
 
+    <div class="bdy">
+        <div class="container" style="margin-top: 100px">
+            <div class="col-sm-6 col-sm-offset-3">
+                <h1><span class="fa fa-sign-in"></span> Share Form </h1>
+                <!-- hiển thị mọi tin nhắn được trả lại từ server cho việc đăng ký -->
+                <%- include ("./partials/message") %>
+                <!-- LOGIN FORM -->
+                <form action="/share/<%= user._id %>" method="post" enctype="multipart/form-data">
 
-    <div class="container" style="margin-top: 100px">
-        <div class="col-sm-6 col-sm-offset-3">
-            <h1><span class="fa fa-sign-in"></span> Share Form </h1>
-            <!-- hiển thị mọi tin nhắn được trả lại từ server cho việc đăng ký -->
-            <%- include ("./partials/message") %>
-            <!-- LOGIN FORM -->
-            <form action="/share/<%= user._id %>" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>TÊN SẢN PHẨM</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>MIÊU TẢ</label>
+                        <input type="text" class="form-control" name="decri" required>
+                    </div>
+                    <div class="form-group">
+                        <label>GIÁ</label>
+                        <input type="text" class="form-control" name="price" required>
+                    </div>
+                    <div class="form-group">
+                        <label>VỊ TRÍ</label>
+                        <select class="form-control" name="location" required>
+                            <option name="" value="0" selected>Chọn danh mục</option>
+                            <option value="An Giang">An Giang
+                            <option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu
+                            <option value="Bắc Giang">Bắc Giang
+                            <option value="Bắc Kạn">Bắc Kạn
+                            <option value="Bạc Liêu">Bạc Liêu
+                            <option value="Bắc Ninh">Bắc Ninh
+                            <option value="Bến Tre">Bến Tre
+                            <option value="Bình Định">Bình Định
+                            <option value="Bình Dương">Bình Dương
+                            <option value="Bình Phước">Bình Phước
+                            <option value="Bình Thuận">Bình Thuận
+                            <option value="Bình Thuận">Bình Thuận
+                            <option value="Cà Mau">Cà Mau
+                            <option value="Cao Bằng">Cao Bằng
+                            <option value="Đắk Lắk">Đắk Lắk
+                            <option value="Đắk Nông">Đắk Nông
+                            <option value="Điện Biên">Điện Biên
+                            <option value="Đồng Nai">Đồng Nai
+                            <option value="Đồng Tháp">Đồng Tháp
+                            <option value="Đồng Tháp">Đồng Tháp
+                            <option value="Gia Lai">Gia Lai
+                            <option value="Hà Giang">Hà Giang
+                            <option value="Hà Nam">Hà Nam
+                            <option value="Hà Tĩnh">Hà Tĩnh
+                            <option value="Hải Dương">Hải Dương
+                            <option value="Hậu Giang">Hậu Giang
+                            <option value="Hòa Bình">Hòa Bình
+                            <option value="Hưng Yên">Hưng Yên
+                            <option value="Khánh Hòa">Khánh Hòa
+                            <option value="Kiên Giang">Kiên Giang
+                            <option value="Kon Tum">Kon Tum
+                            <option value="Lai Châu">Lai Châu
+                            <option value="Lâm Đồng">Lâm Đồng
+                            <option value="Lạng Sơn">Lạng Sơn
+                            <option value="Lào Cai">Lào Cai
+                            <option value="Long An">Long An
+                            <option value="Nam Định">Nam Định
+                            <option value="Nghệ An">Nghệ An
+                            <option value="Ninh Bình">Ninh Bình
+                            <option value="Ninh Thuận">Ninh Thuận
+                            <option value="Phú Thọ">Phú Thọ
+                            <option value="Quảng Bình">Quảng Bình
+                            <option value="Quảng Bình">Quảng Bình
+                            <option value="Quảng Ngãi">Quảng Ngãi
+                            <option value="Quảng Ninh">Quảng Ninh
+                            <option value="Quảng Trị">Quảng Trị
+                            <option value="Sóc Trăng">Sóc Trăng
+                            <option value="Sơn La">Sơn La
+                            <option value="Tây Ninh">Tây Ninh
+                            <option value="Thái Bình">Thái Bình
+                            <option value="Thái Nguyên">Thái Nguyên
+                            <option value="Thanh Hóa">Thanh Hóa
+                            <option value="Thừa Thiên Huế">Thừa Thiên Huế
+                            <option value="Tiền Giang">Tiền Giang
+                            <option value="Trà Vinh">Trà Vinh
+                            <option value="Tuyên Quang">Tuyên Quang
+                            <option value="Vĩnh Long">Vĩnh Long
+                            <option value="Vĩnh Phúc">Vĩnh Phúc
+                            <option value="Yên Bái">Yên Bái
+                            <option value="Phú Yên">Phú Yên
+                            <option value="Tp.Cần Thơ">Tp.Cần Thơ
+                            <option value="Tp.Đà Nẵng">Tp.Đà Nẵng
+                            <option value="Tp.Hải Phòng">Tp.Hải Phòng
+                            <option value="Tp.Hà Nội">Tp.Hà Nội
+                            <option value="TP  HCM">TP HCM
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>DANH MỤC</label>
+                        <select class="form-control" name="tags" required>
+                            <option name="" value="0" selected>Chọn danh mục</option>
+                            <option name="sach" value="sach">Sách</option>
+                            <option name="thoitrang" value="thoitrang">Thời trang</option>
+                            <option name="dientu" value="dientu">Điện tử</option>
+                            <option name="giaydep" value="giaydep">Giày dép</option>
+                            <option name="linhtinh" value="linhtinh">Linh tinh</option>
+                        </select>
+                    </div>
+                    <label>HÌNH ẢNH</label>
+                    <input type="file" name="avatar" required />
 
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" name="name">
-                </div>
-                <div class="form-group">
-                    <label>Decri</label>
-                    <input type="text" class="form-control" name="decri">
-                </div>
-                <div class="form-group">
-                    <label>Price</label>
-                    <input type="text" class="form-control" name="price">
-                </div>
-                <div class="form-group">
-                    <label>Tag</label>
-                    <select class="form-control" name="tags">
-                        <option name="" value="0" selected>Select Tag</option>
-                        <option name="sach" value="sach">Sách</option>
-                        <option name="thoitrang" value="thoitrang">Thời trang</option>
-                        <option name="dientu" value="dientu">Điện tử</option>
-                        <option name="giaydep" value="giaydep">Giày dép</option>
-                        <option name="linhtinh" value="linhtinh">Linh tinh</option>
-                    </select>
-                </div>
+                    <button type="submit" class="btn btn-success btn-lg" style="margin-top: 10px">Submit</button>
+                </form>
+                <hr>
 
-                <input type="file" name="avatar" />
-
-                <button type="submit" class="btn btn-success btn-lg" style="margin-top: 10px">Submit</button>
-            </form>
-            <hr>
-           
+            </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

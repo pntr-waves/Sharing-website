@@ -7,7 +7,8 @@ var productSchema = mongoose.Schema({
     userofproductID: String,
     ImageProduct:String,
     qty: Number,
-    price: Number
+    price: Number,
+    status:{type: String, default:"Chưa gửi yêu cầu"}
 });
 
 

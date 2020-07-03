@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DemoChat</title>
+    <script src="jquery.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+
+
+        var socket = io("http://localhost:3000")
+
+
+        socket.on("server-send-room", function (data) {
+            $("#room").append("<div>" + data.nd + "</div>");
+        });
+        socket.on("server-send-dki-thanhcong", function (data) {
+            $("#currentUser").html(data);
+            $("#loginForm").hide(2000);
+            $("#chatForm").show(1000);
+        })
+
+        socket.on("server-send-danhsach-Users", function (data) {
+            $("#boxContent").html("");
+            data.forEach(function (i) {
+                $("#boxContent").append("<div class='user'>" + i + "</div>");
+            })
+        });
+
+        socket.on("server-send-message", function (data) {
+            $("#ListMessage").append("<span >" + "("+data.time+")" + "</span>");
+            $("#ListMessage").append("<div >" + data.un + ": " + data.nd + "</div>");
+
+        });
+
+        socket.on("ai-do-dang-go-chu", function (data) {
+            $("#thongbao").html("<img width='20px' src='giphy.gif'>" + data);
+        });
+        socket.on("ai-do-STOP-go-chu", function () {
+            $("#thongbao").html("");
+        });
+
+
+        $(document).ready(function () {
+
+            socket.emit("tao-room", $("<%=partnerid%>").selector + $("<%=userid%>").selector)
+            socket.emit("client-send-name", $("<%=user.facebook.name||user.local.name||user.google.name%>").selector);
+            $("#btnSend").click(function () {
+                socket.emit("user-send-message", $("#message").val());
+
+            })
+
+
+
+        })
+    </script>
+    <link rel="stylesheet" type="text/css" href="layout.css" />
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="room"></div>
+        <div id="chatForm">
+            <h2></h2>
+            <div id="right">
+                <div id="sayHi">Hello <span id="currentUser"></span>
+                    <input type="button" id="btnLogout" value="Logout">
+                </div>
+                <div id="ListMessage">
+                    <% data.forEach(function(item){ %>
+                    <span>(<%=item.time%>)</span>
+                    <div><%=item.sender%>: <%=item.data%></div>
+
+                    <%})%>
+                </div>
+                <div id="thongbao"></div>
+                <input type="text" id="message" />
+                <input type="button" id="btnSend" value="Send">
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rexeze/formatTimeStamp/src/index.min.js"></script>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 const formidable = require("formidable");
 const multer = require("multer");
+var bcrypt = require("bcrypt-nodejs");
 var upload = multer({ dest: 'uploads/' })
 const User = require("../models/users");
 const Product = require("../models/product")
@@ -7,6 +8,8 @@ const Cart = require("../models/cart")
 const CartMongo = require("../models/cartmongo")
 const Comment = require("../models/comment")
 const Notification = require("../models/notification")
+const Chat = require("../models/chat")
+const messData = require("../models/messdata")
 const fs = require("fs")
 const mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
@@ -14,7 +17,7 @@ var ObjectId = mongoose.Types.ObjectId;
 
 
 module.exports = function (app, passport) {
-   
+
     app.get("/notification/:userid", (req, res) => {
         var userID = req.params.userid;
         Notification.find({ clientID: userID }, (err, doc) => {
@@ -36,7 +39,7 @@ module.exports = function (app, passport) {
         var start = (page - 1) * perPage;
         var end = page * perPage;
         var drop = (page - 1) * perPage;
-        Product.find().limit(3).skip(drop).exec(function (err, product) {
+        Product.find().limit(5).skip(drop).exec(function (err, product) {
             if (err) throw err;
             else {
 
@@ -101,6 +104,26 @@ module.exports = function (app, passport) {
         })
 
     })
+    app.get("/filter_comment", function (req, res) {
+        var page = req.query.page || 1;
+        var perPage = 3;
+        var start = (page - 1) * perPage;
+        var end = page * perPage;
+        var drop = (page - 1) * perPage;
+        Product.find({
+
+            comment: { $gte: 1 } //LỌC THEO VIEW
+
+        }).limit(3).skip(drop).exec(function (err, product) {
+
+            if (err) throw err;
+            else {
+                res.render("test", { aaa: product, message: req.flash("productMessage") })
+            }
+        })
+
+    })
+
 
 
     //login
@@ -138,6 +161,10 @@ module.exports = function (app, passport) {
                         newUser.local.name = username;
                         newUser.local.email = email;
                         newUser.local.password = newUser.generateHash(password);
+                        newUser.local.local = "1";
+                        newUser.fullname = "";
+                        newUser.address = "";
+                        newUser.phone = "";
                         //luu user
                         newUser.save(function (err) {
                             if (err) {
@@ -173,7 +200,7 @@ module.exports = function (app, passport) {
 
             //date: { $gte: sixHoursAgo  } //LỌC THEO THỜI GIAN
 
-        }).limit(3).skip(drop).exec(function (err, product) {
+        }).limit(5).skip(drop).exec(function (err, product) {
 
             if (err) throw err;
             else {
@@ -234,6 +261,25 @@ module.exports = function (app, passport) {
             if (err) throw err;
             else {
                 res.render("test2", { user: req.user, aaa: product, message: req.flash("productMessage") })
+            }
+        })
+
+    })
+    app.get("/home/filter_comment", function (req, res) {
+        var page = req.query.page || 1;
+        var perPage = 3;
+        var start = (page - 1) * perPage;
+        var end = page * perPage;
+        var drop = (page - 1) * perPage;
+        Product.find({
+
+            comment: { $gte: 1 } //LỌC THEO VIEW
+
+        }).limit(3).skip(drop).exec(function (err, product) {
+
+            if (err) throw err;
+            else {
+                res.render("test", { aaa: product, user: req.user, message: req.flash("productMessage") })
             }
         })
 
@@ -313,6 +359,7 @@ module.exports = function (app, passport) {
             const decri = fields.decri;
             const price = fields.price;
             const tag = fields.tags;
+            const location = fields.location;
             var file = files.avatar.path.split("\\")[1];// lay ten file
             //res.json({ fields, file });
 
@@ -323,12 +370,17 @@ module.exports = function (app, passport) {
             newProduct.decri = decri;
             newProduct.price = price;
             newProduct.userId = userID;
-            newProduct.tag = tag;
-            newProduct.urlImage = urlimage;
-            newProduct.save(function (err) {
-                if (err) throw err;
+            User.find({_id:ObjectId(userID)},function(err,user){
+                newProduct.userName = user[0].local.name||user[0].facebook.name||user[0].goole.name;
+                newProduct.tag = tag;
+                newProduct.location = location;
+                newProduct.urlImage = urlimage;
+                newProduct.save(function (err) {
+                    if (err) throw err;
+                })
+                res.redirect("/home")
             })
-            res.redirect("/home")
+            
 
         })
 
@@ -474,7 +526,7 @@ module.exports = function (app, passport) {
         CartMongo.find({ userID: ObjectId(req.params.userid) }, function (err, product) {
             if (err) throw err;
             else {
-                res.render("shopping-cart", { products: product, user: req.user, message: req.flash("shoppingcartMessage") })
+                res.render("shopping-cart", { products: product, user: req.user, messages: req.flash("shoppingcartMessage") })
             }
         })
     })
@@ -531,13 +583,24 @@ module.exports = function (app, passport) {
     app.post("/detail/:productid/:userid", (req, res) => {
         var productID = req.params.productid;
         var userID = req.params.userid;
-        var CM = new Comment();
-        CM.userID = userID;
-        CM.userName = req.user.local.name || req.user.facebook.name || req.user.google.name;
-        CM.productID = productID;
-        CM.text = req.body.comment;
-        CM.save();
-        res.redirect(`/detail/${productID}`)
+        Product.find({ _id: ObjectId(productID) }, (err, product) => {
+            var comment = product[0].comment;
+            console.log(comment);
+            comment++;
+            var CM = new Comment();
+            CM.userID = userID;
+            CM.userName = req.user.local.name || req.user.facebook.name || req.user.google.name;
+            CM.productID = productID;
+            CM.text = req.body.comment;
+
+            CM.save();
+
+            Product.findOneAndUpdate({ _id: ObjectId(productID) }, { comment: comment }, (err, doc) => {
+                res.redirect(`/detail/${productID}`)
+            })
+
+        })
+
     })
     app.get("/detail_/:productid", function (req, res) {
         var productID = req.params.productid;
@@ -609,8 +672,9 @@ module.exports = function (app, passport) {
         })
 
     })
-    
+
     app.get("/shopping-cart/payment/:productid/:userid", (req, res) => {
+
         var userID = req.params.userid;
         var productID = req.params.productid;
         var message = `Có một yêu cầu đên từ người dùng có ID: ${userID}`;
@@ -625,12 +689,17 @@ module.exports = function (app, passport) {
                 console.log(product[0].userId);
                 var productname = product[0].name;
                 Message.productName = productname;
-                var message = `Tôi muốn mua ${productname} của bạn!`;
+                var message = `Tôi muốn mua ${productname} của bạn! 
+                               THÔNG TIN
+                               Tên đầy đủ: ${userFullname}
+                               Số điện thoại: ${userPhone}
+                               Địa chỉ: ${userAddress}`;
                 Message.clientID = product[0].userId;
                 User.find({ _id: ObjectId(product[0].userId) }, (err, user) => {
                     clientName = user[0].local.name || user[0].facebook.name || user[0].google.name;
                     Message.clientName = clientName;
                     Message.text = message;
+                    console.log(message);
                     Message.save();
                     res.redirect(`/shopping-cart/${userID}`);
                 })
@@ -640,35 +709,163 @@ module.exports = function (app, passport) {
 
         })
     })
-    app.get("/shopping-cart/payment/:userid", (req, res) => {
-        var userID = req.params.userid;
-        var i = 0;
-        
-        CartMongo.find({ userID: ObjectId(userID) }, (err, product) => {
-            console.log(product.length);
-            for (i; i < product.length; i++) {
-                var Message = new Notification();
-                Message.userID = userID;
-                Message.userName = req.user.local.name || req.user.facebook.name || req.user.google.name;
-                Message.productID = product[i].productID;
-                Message.productName = product[i].productName;
-                var productName = product[i].productName;
-                var message = `Tôi muốn mua ${productName}!`;
-                Message.text = message;
-                Message.clientID = product[i].userofproductID;
-                Message.save();
-                
 
-            }
-            if(i=product.length){
-                res.redirect(`/shopping-cart/${userID}`);
-            }
+    app.post("/shopping-cart/checkout/:userid", (req, res) => {
+        var userID = req.params.userid;
+        const fullname = req.body.fullname;
+        const phone = req.body.phone;
+        const address = req.body.address;
+        const messages = req.body.message;
+
+        User.findOneAndUpdate({ _id: ObjectId(userID) }, { fullname: fullname, phone: phone, address: address }, (err, doc) => {
+
+            // res.redirect(`/shopping-cart/checkout/payment/${userID}`);
+            var userFullname = req.user.fullname;
+            var userAddress = req.user.address;
+            var userPhone = req.user.phone;
+            var userID = req.params.userid;
+            var i = 0;
+            var n = 0;
+            CartMongo.find({ userID: ObjectId(userID) }, (err, product) => {
+                console.log(product.length);
+
+                for (i; i < product.length; i++) {
+                    var Message = new Notification();
+                    Message.userID = userID;
+                    Message.userName = req.user.local.name || req.user.facebook.name || req.user.google.name;
+                    Message.productID = product[i].productID;
+                    Message.productName = product[i].productName;
+                    var productName = product[i].productName;
+                    var message = `Tôi muốn mua ${productName} của bạn! THÔNG TIN / Tên đầy đủ: ${userFullname}, Số điện thoại: ${userPhone}, Địa chỉ: ${userAddress}`;
+                    Message.text = message;
+                    Message.message = messages;
+                    Message.clientID = product[i].userofproductID;
+                    Message.save();
+                    var status = "Chờ xác nhận";
+                    CartMongo.findOneAndUpdate({ productID: product[i].productID }, { status: status }, (err, doc) => {
+                        n++;
+                    })
+
+                }
+                if (n = product.length) {
+                    res.redirect(`/shopping-cart/${userID}`);
+                    
+                }
+            })
+
+
+        })
+
+    })
+    app.get("/shopping-cart/checkout/:userid", (req, res) => {
+        var userID = req.params.userid;
+
+        CartMongo.find({ userID: userID,status:"Chưa gửi yêu cầu" }, (err, product) => {
+            res.render("checkout.ejs", { user: req.user, product: product })
+        })
+
+    })
+    app.get("/status_ok/:userid/:productid", (req, res) => {
+        var userID = req.params.userid;
+        var productID = req.params.productid;
+        var status = "Đã xác nhận!";
+        CartMongo.findOneAndUpdate({ userID: ObjectId(userID) }, { status: status }, (err, doc) => {
+            res.redirect("/home");
+        })
+    })
+    app.get("/status_no/:userid/:productid", (req, res) => {
+        var userID = req.params.userid;
+        var productID = req.params.productid;
+        var status = "Đã từ chối!";
+        CartMongo.findOneAndUpdate({ userID: ObjectId(userID) }, { status: status }, (err, doc) => {
+
+            Notification.remove({ userID: userID, productID: productID }, (err, product) => {
+                res.redirect("/home");
+            })
         })
     })
 
+    app.get("/profile/:userid", (req, res) => {
+        res.render("profile", { user: req.user, message: req.flash("profileMessage"),messages: req.flash("profileMessage")  })
+    })
+    app.post("/profile/:userid", (req, res) => {
+        var userID = req.params.userid
+        var fullname = req.body.fullname;
+        var address = req.body.address;
+        var name = req.body.name;
+        var phone = req.body.phone;
+        var email = req.body.email;
+        User.findOneAndUpdate({ _id: ObjectId(userID) }, { fullname: fullname, address: address,phone:phone}, (err, user) => {
+            //res.redirect(`/profile/${userID}`)
+            
+            res.render("profile", { user: req.user, messages:"Cập nhật thông tin thành công!", message: req.flash("profileMessage") })
+         })
+        
+    })
+    
+    app.get("/profile/change_pass/:userid", (req, res) => {
+        res.render("changepass", { user: req.user, message: req.flash("changepassMessage"),messages: req.flash("changepassMessage")  })
+    })
+    app.post("/profile/change_pass/:userid", (req, res) => {
+        var userID = req.params.userid;
+        var pass1 = req.body.pass1;
+        var pass2 = req.body.pass2;
+        var hash1;
+        if (pass1 !== pass2) {
+            res.render("changepass", { user: req.user, message: "Mật khẩu phải trùng khớp",messages: req.flash("changepassMessage") })
+        } else {
+
+            bcrypt.genSalt(8, function (err, salt) {
+                if (err) {
+                    throw err
+                } else {
+                    bcrypt.hash(pass1, salt, null, function (err, hash) {
+                        if (err) {
+                            throw err
+                        } else {
+                            if (req.user.local) {
+                                User.findOneAndUpdate({ _id: ObjectId(userID) }, {"local.password": hash }, (err, user) => {
+                                   // res.redirect(`/profile/${userID}`)
+                                    res.render("changepass", { user: req.user, messages:"Cập nhật thông tin thành công!", message: req.flash("changepassMessage") })
+                                })
+                            } 
+
+                        }
+                    })
+                    
+                }
+            })
 
 
-
+        }
+    })
+    app.get("/chat/:partnerid:userid",function(req,res){
+        partnerID = req.params.partnerid;
+        userID = req.params.userid;
+        var room = partnerID+userID;
+        messData.find({room:room},function(err,data){
+            res.render("chat",{user:req.user,partnerid:partnerID,userid:userID,data:data})
+        }).limit(100)
+        
+    })
+    app.get("/chat",function(req,res){
+        Chat.find({partner:req.user._id},function(err,user1){
+            if(user1!=""){
+               
+            res.render("chat2",{user:req.user,findchat:user1,temp:"0"})
+                    
+            }else{
+                Chat.find({user:req.user._id},function(err,user2){
+                    if(user2!=""){
+                        res.render("chat2",{user:req.user,findchat:user2,temp:"1"})
+                    }else{
+                        res.render("chat2",{user:req.user,findchat:user2,temp:"2"})
+                    }
+                })
+            }
+            
+        })
+    })
 
 }
 

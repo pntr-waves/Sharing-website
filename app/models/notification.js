@@ -8,6 +8,7 @@ var chatSchema = mongoose.Schema({
     clientID:String,
     clientName:String,
     text:String,
+    message:String,
     time:{type:Date, default:Date.now}
 });
 

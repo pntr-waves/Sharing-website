@@ -80,6 +80,10 @@ module.exports = function (passport) {
                         newUser.facebook.token = token;
                         newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName; // bạn có thể log đối tượng profile để xem cấu trúc
                         newUser.facebook.email = profile.emails[0].value; // fb có thể trả lại nhiều email, chúng ta lấy cái đầu tiền
+                        newUser.facebook.facebook = "1";
+                        newUser.fullname = "";
+                        newUser.address = "";
+                        newUser.phone = "";
                         // lưu vào db
                         newUser.save(function (err) {
                             if (err)
@@ -116,6 +120,10 @@ module.exports = function (passport) {
                         newUser.google.token = token;
                         newUser.google.name = profile.displayName;
                         newUser.google.email = profile.emails[0].value; // pull the first email
+                        newUser.google.google = "1";
+                        newUser.fullname = "";
+                        newUser.address = "";
+                        newUser.phone = "";
                         // save the user
                         newUser.save(function (err) {
                             if (err)
